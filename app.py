@@ -176,3 +176,35 @@ with tab_pred:
         st.info(f"In plain words: the strongest reason is **{top.index[-1]}** "
                 f"({'raises' if top.iloc[-1] > 0 else 'lowers'} the risk). "
                 "These are associations the model learned, not causes.")
+
+
+# --- Section 5: business (Felipe's proposal, propuesta.md) --------------------------------
+with tab_biz:
+    st.subheader("Retention assistant for telecom companies")
+    st.markdown(
+        "- **Problem:** the 1,869 customers who left last month paid **$139,131/month**; that revenue is lost "
+        "every month after.\n"
+        "- **Product:** monthly churn list (recall 0.914, precision 0.440 on test) + *why* each customer is at risk "
+        "(SHAP/LIME), in an app anyone in the company can use.\n"
+        "- **Value:** offers only to a selected group, personalised to what affects each customer, instead of a "
+        "discount for everybody.\n"
+        "- **Pricing:** 15% of what is really saved, measured against a random group of at-risk customers "
+        "who get no offer.")
+
+    st.subheader("Scenario simulator (hypothetical numbers, not model results)")
+    pred = pd.read_csv("artifacts/test_predictions.csv")
+    flagged = int(pred.y_pred.sum())                 # customers the model would contact (test = one month)
+    avg_bill = df.loc[df["Churn"] == "Yes", "MonthlyCharges"].mean()
+    b1, b2, b3 = st.columns(3)
+    churn_no_offer = b1.slider("Churn of flagged customers WITHOUT offer (%)", 0, 100, 40)
+    churn_offer = b2.slider("Churn of flagged customers WITH offer (%)", 0, 100, 25)
+    fee = b3.slider("Our fee (% of savings)", 0, 50, 15)
+
+    saved = flagged * max(churn_no_offer - churn_offer, 0) / 100       # control-group difference
+    revenue = saved * avg_bill
+    r1, r2, r3 = st.columns(3)
+    r1.metric(f"Customers contacted (of {len(pred):,} in test)", f"{flagged:,}")
+    r2.metric("Customers really saved", f"{saved:,.0f}")
+    r3.metric("Monthly revenue kept / our fee", f"${revenue:,.0f} / ${revenue * fee / 100:,.0f}")
+    st.caption("Limitations: trained on one telecom's data (other businesses need retraining); a new service "
+               "means retraining; SHAP shows association, not what will fix a customer's problem.")
