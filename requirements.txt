@@ -1,0 +1,10 @@
+# Same versions as the Colab where model.joblib was trained (Python 3.13). A different
+# scikit-learn may fail to load the pickled pipeline.
+scikit-learn==1.6.1
+numpy==2.4.6
+pandas==2.2.3
+scipy==1.16.3
+joblib==1.6.0
+streamlit==1.66.1
+plotly==7.1.0
+lime==0.2.0.1

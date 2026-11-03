@@ -1,0 +1,4 @@
+,configs,time_s,best_f1,best_params
+Grid,24,27.9,0.633,"{'clf__C': np.float64(0.01), 'clf__class_weight': 'balanced', 'clf__penalty': 'l2'}"
+Random,24,12.2,0.633,"{'clf__C': np.float64(0.01967432802530612), 'clf__class_weight': 'balanced', 'clf__penalty': 'l2'}"
+TPE,24,28.1,0.634,"{'C': 0.015311828549009162, 'penalty': 'l2', 'class_weight': 'balanced'}"
